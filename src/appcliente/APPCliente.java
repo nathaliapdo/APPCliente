@@ -41,6 +41,8 @@ public class APPCliente extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuPrimeiraContagem = new javax.swing.JMenuItem();
         jMenuPrimeiraContagem1 = new javax.swing.JMenuItem();
+        jMenuPrimeiraContagem2 = new javax.swing.JMenuItem();
+        jMenuPrimeiraContagem3 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -109,7 +111,7 @@ public class APPCliente extends javax.swing.JFrame {
         jMenu1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         jMenuPrimeiraContagem.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jMenuPrimeiraContagem.setText("Livro");
+        jMenuPrimeiraContagem.setText("Status Cliente");
         jMenuPrimeiraContagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuPrimeiraContagemActionPerformed(evt);
@@ -118,13 +120,31 @@ public class APPCliente extends javax.swing.JFrame {
         jMenu1.add(jMenuPrimeiraContagem);
 
         jMenuPrimeiraContagem1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jMenuPrimeiraContagem1.setText("Usuário");
+        jMenuPrimeiraContagem1.setText("Vendedor");
         jMenuPrimeiraContagem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuPrimeiraContagem1ActionPerformed(evt);
             }
         });
         jMenu1.add(jMenuPrimeiraContagem1);
+
+        jMenuPrimeiraContagem2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jMenuPrimeiraContagem2.setText("Editora");
+        jMenuPrimeiraContagem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuPrimeiraContagem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuPrimeiraContagem2);
+
+        jMenuPrimeiraContagem3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jMenuPrimeiraContagem3.setText("Fornecedor");
+        jMenuPrimeiraContagem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuPrimeiraContagem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuPrimeiraContagem3);
 
         jMenuBar1.add(jMenu1);
 
@@ -194,6 +214,26 @@ public class APPCliente extends javax.swing.JFrame {
         frm.setVisible(true);
     }//GEN-LAST:event_jMenuPrimeiraContagem1ActionPerformed
 
+    private void jMenuPrimeiraContagem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPrimeiraContagem2ActionPerformed
+        // TODO add your handling code here:
+        EditoraMain frm = new EditoraMain();
+        jPanelPrincipal.add(frm);
+        int x = (jPanelPrincipal.getWidth() / 2) - (frm.getWidth() / 2);
+        int y = (jPanelPrincipal.getHeight() / 2) - (frm.getHeight() / 2);
+        frm.setLocation(x, y);
+        frm.setVisible(true);
+    }//GEN-LAST:event_jMenuPrimeiraContagem2ActionPerformed
+
+    private void jMenuPrimeiraContagem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPrimeiraContagem3ActionPerformed
+        // TODO add your handling code here:
+        FornecedorMain frm = new FornecedorMain();
+        jPanelPrincipal.add(frm);
+        int x = (jPanelPrincipal.getWidth() / 2) - (frm.getWidth() / 2);
+        int y = (jPanelPrincipal.getHeight() / 2) - (frm.getHeight() / 2);
+        frm.setLocation(x, y);
+        frm.setVisible(true);
+    }//GEN-LAST:event_jMenuPrimeiraContagem3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -247,6 +287,8 @@ public class APPCliente extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuPrimeiraContagem;
     private javax.swing.JMenuItem jMenuPrimeiraContagem1;
+    private javax.swing.JMenuItem jMenuPrimeiraContagem2;
+    private javax.swing.JMenuItem jMenuPrimeiraContagem3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPrincipal;
     // End of variables declaration//GEN-END:variables
