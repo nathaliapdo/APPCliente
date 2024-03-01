@@ -40,6 +40,7 @@ public class APPCliente extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuPrimeiraContagem = new javax.swing.JMenuItem();
+        jMenuPrimeiraContagem4 = new javax.swing.JMenuItem();
         jMenuPrimeiraContagem1 = new javax.swing.JMenuItem();
         jMenuPrimeiraContagem2 = new javax.swing.JMenuItem();
         jMenuPrimeiraContagem3 = new javax.swing.JMenuItem();
@@ -118,6 +119,15 @@ public class APPCliente extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuPrimeiraContagem);
+
+        jMenuPrimeiraContagem4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jMenuPrimeiraContagem4.setText("Cliente");
+        jMenuPrimeiraContagem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuPrimeiraContagem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuPrimeiraContagem4);
 
         jMenuPrimeiraContagem1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jMenuPrimeiraContagem1.setText("Vendedor");
@@ -234,6 +244,16 @@ public class APPCliente extends javax.swing.JFrame {
         frm.setVisible(true);
     }//GEN-LAST:event_jMenuPrimeiraContagem3ActionPerformed
 
+    private void jMenuPrimeiraContagem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPrimeiraContagem4ActionPerformed
+        // TODO add your handling code here:
+        ClienteMain frm = new ClienteMain();   // Cria na memória a variável StatusClienteMain
+        jPanelPrincipal.add(frm);                          // Mosta na tela principal o StatusClienteMain
+        int x = (jPanelPrincipal.getWidth() / 2) - (frm.getWidth() / 2);
+        int y = (jPanelPrincipal.getHeight() / 2) - (frm.getHeight() / 2);
+        frm.setLocation(x, y); // Centraliza o StatusClienteMain
+        frm.setVisible(true); // Coloca o frm visível dentro do quadrado
+    }//GEN-LAST:event_jMenuPrimeiraContagem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -289,6 +309,7 @@ public class APPCliente extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuPrimeiraContagem1;
     private javax.swing.JMenuItem jMenuPrimeiraContagem2;
     private javax.swing.JMenuItem jMenuPrimeiraContagem3;
+    private javax.swing.JMenuItem jMenuPrimeiraContagem4;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelPrincipal;
     // End of variables declaration//GEN-END:variables

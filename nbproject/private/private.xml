@@ -3,7 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projetos/APPCliente/src/appcliente/APPCliente.java</file>
+            <file>file:/D:/Projetos/APPCliente/src/DAO/FornecedorDAO.java</file>
+            <file>file:/D:/Projetos/APPCliente/src/appcliente/FornecedorMain.java</file>
+            <file>file:/D:/Projetos/APPCliente/src/TO/ClienteTO.java</file>
         </group>
     </open-files>
 </project-private>
