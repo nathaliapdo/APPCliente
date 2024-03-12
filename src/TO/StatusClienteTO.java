@@ -11,8 +11,8 @@ package TO;
  */
 public class StatusClienteTO {
     private int idStatus;
-    private String Sigla;
-    private String Descricao;
+    private String sigla;
+    private String descricao;
 
     public int getIdStatus() {
         return idStatus;
@@ -23,20 +23,20 @@ public class StatusClienteTO {
     }
 
     public String getSigla() {
-        return Sigla;
+        return sigla;
     }
 
-    public void setSigla(String Sigla) {
-        this.Sigla = Sigla;
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
-    public void setDescricao(String Descricao) {
-        this.Descricao = Descricao;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
-    
+
             
 }

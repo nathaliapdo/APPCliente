@@ -12,6 +12,7 @@ import static DAO.FornecedorDAO.inserirFornecedor;
 
 
 import TO.FornecedorTO;
+import TO.VendedoresTO;
 
 import db.DaoException;
 import exceptions.ValidacaoException;
@@ -29,6 +30,15 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -82,7 +92,7 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         btnIncluir.setEnabled(true);
         if (!fluxo.equals("INCLUIR")) {
             btnAlterar.setEnabled(true);
-            btnRelatorio.setEnabled(true);
+            btnRelatorio.setEnabled(false);
             btnExcluir.setEnabled(true);
         }
     }
@@ -108,10 +118,12 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         if (lista != null && lista.size() > 0) {
             lblResult.setText(lista.size() + " registro(s) encontrado(s)");
             for (FornecedorTO v : lista) {
-                String[] rowData = new String[3];
+                String[] rowData = new String[5];
                 rowData[0] = String.format("%04d", v.getIdFornecedor());
                 rowData[1] = v.getNome();
                 rowData[2] = v.getEndereco();
+                rowData[3] = v.getCidade();
+                rowData[4] = v.getUF();
                 getTableModel().addRow(rowData);
             }
             btnAlterar.setEnabled(true);
@@ -121,7 +133,7 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
             lblResult.setText("nenhum registro encontrado");
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
-            btnRelatorio.setEnabled(false);
+            btnRelatorio.setEnabled(true);
         }
     }
 
@@ -168,6 +180,8 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         }
         idFor.setNome(jtxtNome.getText());
         idFor.setEndereco(jtxtEndereco.getText());
+        idFor.setCidade(jtxCidade.getText());
+        idFor.setUF(jtxUF.getText());
         return idFor;
     }
 
@@ -200,6 +214,10 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jtxtEndereco = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jtxCidade = new javax.swing.JTextField();
+        jtxUF = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -212,11 +230,11 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Codigo", "Nome/Razao", "Endereço"
+                "Codigo", "Nome/Razao", "Endereço", "Cidade", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -443,16 +461,30 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("Cidade...........:");
+
+        jtxCidade.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jtxCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxCidadeActionPerformed(evt);
+            }
+        });
+
+        jtxUF.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jtxUF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxUFActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel14.setText("UF..................:");
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbtnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSair1)
-                .addGap(10, 10, 10))
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -466,10 +498,21 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
                             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                                 .addComponent(jtxtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jbtnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(btnSair1))
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
+                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtxtEndereco)))
+                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtxUF)
+                            .addComponent(jtxCidade)
+                            .addComponent(jtxtEndereco))))
                 .addContainerGap())
         );
         jInternalFrame1Layout.setVerticalGroup(
@@ -489,8 +532,16 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSair1)
-                    .addComponent(jbtnOk))
+                    .addComponent(jtxCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtxUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 31, Short.MAX_VALUE)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbtnOk)
+                    .addComponent(btnSair1))
                 .addContainerGap())
         );
 
@@ -509,7 +560,8 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -539,6 +591,47 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+          // Pede confirmação para emissao do relatório
+        Object[] options = {"Sim", "Não"};
+        int q = JOptionPane.showOptionDialog(null,
+                "Tem certeza que deseja emitir relatório?", "Saída",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                options, options[1]);
+        if (q == JOptionPane.YES_OPTION) {
+            fluxo = "RELATORIO";
+            // Relatório de usuarios cadastrados e mostrados na tela
+            // array com o que está na tela
+            ArrayList<FornecedorTO> relForGerado;
+
+            try {
+                relForGerado = (ArrayList<FornecedorTO>) DAO.FornecedorDAO.buscaFornecedor(jTextPesquisar.getText());
+                if (relForGerado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Fornecedor(es) " + jTextPesquisar.getText() + " não encontrado(s)!");
+                    return;
+                }
+                // Pergunta se imprime ou gera PDF
+                Object[] options1 = {"Impressora", "Tela"};
+                int q1 = JOptionPane.showOptionDialog(null,
+                        "O relatório será?", "Saída",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                        options1, options1[1]);
+                if (q1 == JOptionPane.YES_OPTION) {
+
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelFornecedores.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relForGerado));
+                    JasperPrintManager.printPage(print, 0, false);
+                } else {
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelFornecedores.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relForGerado));
+                    // exportacao do relatorio para outro formato, no caso PDF 
+                    JasperExportManager.exportReportToPdfFile(print, geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelFornecedores.pdf");
+                    JasperViewer.viewReport(print, false);
+                }
+            } catch (JRException | ValidacaoException | DaoException  ex) {
+                Logger.getLogger(VendedoresMain.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage() + " \nErro na geração relatório!");
+            } 
+        }
         
     }//GEN-LAST:event_btnRelatorioActionPerformed
 
@@ -562,6 +655,8 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
                 jtxtCodigo.setText(String.valueOf(to.getIdFornecedor()));
                 jtxtNome.setText(to.getNome());
                 jtxtEndereco.setText(to.getEndereco());
+                jtxCidade.setText(to.getCidade());
+                jtxUF.setText(to.getUF());
             }
             jtxtNome.requestFocus();
 
@@ -581,6 +676,8 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         jtxtCodigo.setText("");
         jtxtNome.setText("");
         jtxtEndereco.setText("");
+        jtxCidade.setText("");
+        jtxUF.setText("");
         jbtnOk.setVisible(true);
         jInternalFrame1.setVisible(true);
     }//GEN-LAST:event_btnIncluirActionPerformed
@@ -694,6 +791,14 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtxtEnderecoActionPerformed
 
+    private void jtxCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxCidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxCidadeActionPerformed
+
+    private void jtxUFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxUFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxUFActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnExcluir;
@@ -706,11 +811,15 @@ public class FornecedorMain extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextPesquisar;
     private javax.swing.JButton jbtnOk;
+    private javax.swing.JTextField jtxCidade;
+    private javax.swing.JTextField jtxUF;
     private javax.swing.JTextField jtxtCodigo;
     private javax.swing.JTextField jtxtEndereco;
     private javax.swing.JTextField jtxtNome;

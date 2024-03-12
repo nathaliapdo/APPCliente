@@ -16,6 +16,8 @@ public class FornecedorTO implements Serializable {
     private int idFornecedor;
     private String nome = "";
     private String endereco = "";
+    private String cidade = "";
+    private String UF = "";
 
     public int getIdFornecedor() {
         return idFornecedor;
@@ -41,6 +43,20 @@ public class FornecedorTO implements Serializable {
         this.endereco = endereco;
     }
 
+    public String getCidade() {
+        return cidade;
+    }
 
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
 
+    public String getUF() {
+        return UF;
+    }
+
+    public void setUF(String UF) {
+        this.UF = UF;
+    }
+    
 }

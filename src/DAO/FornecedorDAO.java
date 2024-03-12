@@ -1,6 +1,5 @@
 package DAO;
 
-import TO.EditoraTO;
 import TO.FornecedorTO;
 
 
@@ -28,10 +27,12 @@ public class FornecedorDAO {
         PreparedStatement ps = null;
         String INSERT_SQL
                 = "INSERT INTO fornecedor "
-                + "(idFornecedor, nome, endereco) "
+                + "(idFornecedor, nome, endereco, cidade, UF) "
                 + "VALUES('" + to.getIdFornecedor()+ "',"
                 + " '" + to.getNome() + "'," 
-                + " '" + to.getEndereco() + "') ";
+                + " '" + to.getEndereco()+ "'," 
+                + " '" + to.getCidade()+ "'," 
+                + " '" + to.getUF()+ "') ";
         try {
             con = getConnection();
             ps = con.prepareStatement(INSERT_SQL);
@@ -77,7 +78,9 @@ public class FornecedorDAO {
         PreparedStatement ps;
         String UPDATE_SQL = "UPDATE fornecedor SET  "
                 + "nome = '" + to.getNome()+ "', "
-                + "endereco = '" + to.getEndereco()+ "' "
+                + "endereco = '" + to.getEndereco()+ "', "
+                + "cidade = '" + to.getCidade() + "',"
+                + "UF = '" + to.getUF() + "'"
                 + "WHERE idFornecedor  = '" + to.getIdFornecedor()+ "'";
         try {
             con = getConnection();
@@ -141,6 +144,8 @@ public class FornecedorDAO {
         to.setIdFornecedor(rs.getInt("idFornecedor"));
         to.setNome(rs.getString("nome"));
         to.setEndereco(rs.getString("endereco"));
+        to.setCidade(rs.getString("cidade"));
+        to.setUF(rs.getString("UF"));
     }
 
 

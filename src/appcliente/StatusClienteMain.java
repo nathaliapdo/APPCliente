@@ -11,6 +11,7 @@ import static DAO.VendedoresDAO.buscaVendedores;
 import TO.StatusClienteTO;
 import TO.VendedoresTO;
 import db.DaoException;
+import exceptions.ValidacaoException;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,15 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -52,7 +62,7 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
 
     private void bloqueiaBotoes() {
         btnIncluir.setEnabled(false); //Desabilita o botão Incluir
-        btnAlterar.setEnabled(false); //Desabilita o botão Alterar
+        btnRelatorio.setEnabled(false); //Desabilita o botão Alterar
         jtxtSigla.setEditable(true); //Torna o espaço de Sigla editável
         jtxtDescricao.setEditable(true); //Torna o espaço de Descricao editável
         jbtnOk.setVisible(true); //Torna o botão OK visível
@@ -61,7 +71,7 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
     private void desBloqueiaBotoes(String fluxo) {
         btnIncluir.setEnabled(true);
         if (!fluxo.equals("INCLUIR")) {
-            btnAlterar.setEnabled(true);
+            btnRelatorio.setEnabled(true);
         }
     }
 
@@ -84,10 +94,10 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
                 rowData[2] = s.getDescricao();
                 getTableModel().addRow(rowData);
             }
-            btnAlterar.setEnabled(true);
+            btnRelatorio.setEnabled(true);
         } else {
             lblResult.setText("nenhum registro encontrado");
-            btnAlterar.setEnabled(false);
+            btnRelatorio.setEnabled(false);
         }
     }
 
@@ -145,9 +155,10 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
         btnPesquisar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         btnSair = new javax.swing.JButton();
-        btnAlterar = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
         btnIncluir = new javax.swing.JButton();
         lblResult = new javax.swing.JLabel();
+        btnAlterar = new javax.swing.JButton();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jLabel10 = new javax.swing.JLabel();
         jtxtidStatus = new javax.swing.JTextField();
@@ -232,17 +243,17 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
             }
         });
 
-        btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnAlterar.setText("Alterar");
-        btnAlterar.setEnabled(false);
-        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+        btnRelatorio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRelatorio.setText("Relatório");
+        btnRelatorio.setEnabled(false);
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarActionPerformed(evt);
+                btnRelatorioActionPerformed(evt);
             }
         });
-        btnAlterar.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnRelatorio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnAlterarKeyPressed(evt);
+                btnRelatorioKeyPressed(evt);
             }
         });
 
@@ -263,6 +274,20 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
         lblResult.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblResult.setText("999  registros");
 
+        btnAlterar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnAlterar.setText("Alterar");
+        btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+        btnAlterar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnAlterarKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -272,18 +297,20 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblResult, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 244, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnIncluir)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAlterar)))
+                                .addComponent(btnAlterar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -301,8 +328,9 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSair)
-                    .addComponent(btnAlterar)
-                    .addComponent(btnIncluir))
+                    .addComponent(btnRelatorio)
+                    .addComponent(btnIncluir)
+                    .addComponent(btnAlterar))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -387,7 +415,7 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addGap(212, 212, 212)
-                .addComponent(jbtnOk, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                .addComponent(jbtnOk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSair1)
                 .addGap(10, 10, 10))
@@ -458,35 +486,49 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btnSairActionPerformed
 
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        try {
-            if (tblResult.getSelectedRow() == -1) { //Quando não há seleção
-                JOptionPane.showMessageDialog(this, "Selecione Status.");
-                return; //Volta para a tela principal
-            }
-            bloqueiaBotoes();
-            jInternalFrame1.setTitle("ALTERAR"); //O título da jInternalFramel torna-se "alterar"
-            jbtnOk.setText("Alterar"); //O bt torna-se "alterar"
-            jbtnOk.setVisible(true);//O bt ok/alterar fica visível
-            jInternalFrame1.setVisible(true); //A tela principal fica visível
-            fluxo = "ALTERAR"; //A variável fluxo toma valor de "alterar"
-            // Busca Vendedor
-            StatusClienteTO to;
-            to = StatusClienteDAO.detalharStatusCliente(Integer.valueOf(tblResult.getValueAt(tblResult.getSelectedRow(), 0).toString())); 
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        // Pede confirmação para emissao do relatório
+        Object[] options = {"Sim", "Não"};
+        int q = JOptionPane.showOptionDialog(null,
+                "Tem certeza que deseja emitir relatório?", "Saída",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                options, options[1]);
+        if (q == JOptionPane.YES_OPTION) {
+            fluxo = "RELATORIO";
+            // Relatório de usuarios cadastrados e mostrados na tela
+            // array com o que está na tela
+            ArrayList<StatusClienteTO> relStsGerado;
 
-            if (to != null) {
-                jtxtidStatus.setText(String.valueOf(to.getIdStatus()));
-                jtxtSigla.setText(to.getSigla());
-                jtxtDescricao.setText(String.valueOf(to.getDescricao()));
-            }
-            jtxtSigla.requestFocus();
+            try {
+                relStsGerado = (ArrayList<StatusClienteTO>) DAO.StatusClienteDAO.buscaStatusCliente(jTextPesquisar.getText());
+                if (relStsGerado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Status Cliente " + jTextPesquisar.getText() + " não encontrado!");
+                    return;
+                }
+                // Pergunta se imprime ou gera PDF
+                Object[] options1 = {"Impressora", "Tela"};
+                int q1 = JOptionPane.showOptionDialog(null,
+                        "O relatório será?", "Saída",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                        options1, options1[1]);
+                if (q1 == JOptionPane.YES_OPTION) {
 
-        } catch (DaoException ex) {
-            Logger.getLogger(StatusClienteMain.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex.getMessage() + " \nErro na aplicacao");
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelStatusCliente.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relStsGerado));
+                    JasperPrintManager.printPage(print, 0, false);
+                } else {
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelStatusCliente.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relStsGerado));
+                    // exportacao do relatorio para outro formato, no caso PDF 
+                    JasperExportManager.exportReportToPdfFile(print, geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelStatusCliente.pdf");
+                    JasperViewer.viewReport(print, false);
+                }
+            } catch (JRException | ValidacaoException | DaoException  ex) {
+                Logger.getLogger(StatusClienteMain.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage() + " \nErro na geração relatório!");
+            } 
         }
-    }//GEN-LAST:event_btnAlterarActionPerformed
+    }//GEN-LAST:event_btnRelatorioActionPerformed
 
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
 
@@ -558,11 +600,11 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnIncluirKeyPressed
 
-    private void btnAlterarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAlterarKeyPressed
+    private void btnRelatorioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnRelatorioKeyPressed
         if (evt.getKeyCode() == 10) {
             btnAlterarActionPerformed(null);
         }
-    }//GEN-LAST:event_btnAlterarKeyPressed
+    }//GEN-LAST:event_btnRelatorioKeyPressed
 
     private void btnSairKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSairKeyPressed
         if (evt.getKeyCode() == 10) {
@@ -570,10 +612,60 @@ public class StatusClienteMain extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnSairKeyPressed
 
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        // TODO add your handling code here:
+         // Pede confirmação para emissao do relatório
+        Object[] options = {"Sim", "Não"};
+        int q = JOptionPane.showOptionDialog(null,
+                "Tem certeza que deseja emitir relatório?", "Saída",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                options, options[1]);
+        if (q == JOptionPane.YES_OPTION) {
+            fluxo = "RELATORIO";
+            // Relatório de usuarios cadastrados e mostrados na tela
+            // array com o que está na tela
+            ArrayList<VendedoresTO> relVndGerado;
+
+            try {
+                relVndGerado = (ArrayList<VendedoresTO>) DAO.VendedoresDAO.buscaVendedores(jTextPesquisar.getText());
+                if (relVndGerado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Vendedor(es) " + jTextPesquisar.getText() + " não encontrado!");
+                    return;
+                }
+                // Pergunta se imprime ou gera PDF
+                Object[] options1 = {"Impressora", "Tela"};
+                int q1 = JOptionPane.showOptionDialog(null,
+                        "O relatório será?", "Saída",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                        options1, options1[1]);
+                if (q1 == JOptionPane.YES_OPTION) {
+
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelVendedores.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relVndGerado));
+                    JasperPrintManager.printPage(print, 0, false);
+                } else {
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelVendedores.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relVndGerado));
+                    // exportacao do relatorio para outro formato, no caso PDF 
+                    JasperExportManager.exportReportToPdfFile(print, geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelVendedores.pdf");
+                    JasperViewer.viewReport(print, false);
+                }
+            } catch (JRException | ValidacaoException | DaoException  ex) {
+                Logger.getLogger(VendedoresMain.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage() + " \nErro na geração relatório!");
+            } 
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnAlterarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAlterarKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnRelatorio;
     private javax.swing.JButton btnSair;
     private javax.swing.JButton btnSair1;
     private javax.swing.JInternalFrame jInternalFrame1;

@@ -13,17 +13,17 @@ import java.io.Serializable;
 public class ClienteTO implements Serializable {
     private static final long serialVersionUID = -5275385798567097878L;
 
-    private int idCliente;
+    private String idCliente;
     private String nome = "";
     private String endereco = "";
     private String cidade = "";
     private String UF = "";
 
-    public int getIdCliente() {
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 
@@ -58,5 +58,5 @@ public class ClienteTO implements Serializable {
     public void setUF(String UF) {
         this.UF = UF;
     }
-
 }
+

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelStatusCliente" language="groovy" pageWidth="226" pageHeight="1417" columnWidth="226" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5f1c0700-8ce5-4e1c-9fa3-6dd2648e9005">
+	<property name="ireport.zoom" value="3.630000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="idFornecedor" class="java.lang.Integer"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="UF" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="3" width="200" height="11" uuid="bd7d131e-d90d-4dbf-b7a6-80fcb5adafb2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório Fornecedores]]></text>
+			</staticText>
+			<line>
+				<reportElement x="12" y="24" width="186" height="1" uuid="5a843026-380a-4ae1-ae2c-155d91657c56"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="14" width="20" height="8" uuid="2975408f-ed06-4d61-84b9-764599027711"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[idFornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="32" y="14" width="43" height="8" uuid="fc8096ff-1c4f-436a-8c45-9d4676bb0d3b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="14" width="68" height="8" uuid="7d8ae417-e320-4d7e-8d71-1b9a878f3655"/>
+				<textElement verticalAlignment="Top">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="14" width="46" height="8" uuid="d6f1517d-4fe9-407a-bad5-c4276ffc0734"/>
+				<textElement verticalAlignment="Top">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="14" width="23" height="8" uuid="4a9de746-596a-4e39-934f-1b8983ad8d6d"/>
+				<textElement verticalAlignment="Top">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="0" width="20" height="8" uuid="b8707e82-e2b0-4548-a43d-7123ed35ccd6"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idFornecedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="0" width="43" height="8" uuid="b5834527-dff4-4049-b178-28422facdbbb"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="12" y="10" width="186" height="1" uuid="2ff3a01a-b9fc-4f32-a822-0bdde7f16e65"/>
+			</line>
+			<textField>
+				<reportElement x="75" y="0" width="68" height="8" uuid="c41694ee-05bc-4d1e-949a-d5eaf60f8ce8"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{endereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="0" width="23" height="8" uuid="0a830eb0-0e62-4f98-a539-18b3d1b951a1"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UF}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="143" y="0" width="46" height="8" uuid="a76e7159-0f9f-4eb3-9160-3dc1846de806"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="8" splitType="Stretch"/>
+	</summary>
+</jasperReport>

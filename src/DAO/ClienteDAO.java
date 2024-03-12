@@ -144,7 +144,7 @@ public class ClienteDAO {
     }
 
     private static void toset(ResultSet rs, ClienteTO to) throws DaoException, SQLException {
-        to.setIdCliente(rs.getInt("idCliente"));
+        to.setIdCliente(rs.getString("idCliente"));
         to.setNome(rs.getString("nome"));
         to.setEndereco(rs.getString("endereco"));
         to.setCidade(rs.getString("cidade"));

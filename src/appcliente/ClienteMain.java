@@ -7,6 +7,7 @@ package appcliente;
 
 import DAO.ClienteDAO;
 import TO.ClienteTO;
+import TO.FornecedorTO;
 
 import db.DaoException;
 import exceptions.ValidacaoException;
@@ -24,6 +25,16 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import static jdk.nashorn.internal.runtime.Debug.id;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -104,7 +115,7 @@ public class ClienteMain extends javax.swing.JInternalFrame {
             lblResult.setText(lista.size() + " registro(s) encontrado(s)");
             for (ClienteTO v : lista) {
                 String[] rowData = new String[5];
-                rowData[0] = String.format("%04d", v.getIdCliente());
+                rowData[0] = v.getIdCliente();
                 rowData[1] = v.getNome();
                 rowData[2] = v.getEndereco();
                 rowData[3] = v.getCidade();
@@ -113,12 +124,12 @@ public class ClienteMain extends javax.swing.JInternalFrame {
             }
             btnAlterar.setEnabled(true);
             btnExcluir.setEnabled(true);
-            btnRelatorio.setEnabled(false);
+            btnRelatorio.setEnabled(true);
         } else {
             lblResult.setText("nenhum registro encontrado");
             btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
-            btnRelatorio.setEnabled(false);
+            btnRelatorio.setEnabled(true);
         }
     }
 
@@ -144,7 +155,7 @@ public class ClienteMain extends javax.swing.JInternalFrame {
             
         }
         if (fluxo.equals("ALTERAR")) {
-            idCli = parseTO(fluxo, Integer.valueOf(tblResult.getValueAt(tblResult.getSelectedRow(), 0).toString()));
+            idCli = parseTO(fluxo, 0);
             try {
                 ClienteDAO.alterarCliente(idCli);
                 JOptionPane.showMessageDialog(this, "Os dados foram alterados com sucesso.");
@@ -158,10 +169,11 @@ public class ClienteMain extends javax.swing.JInternalFrame {
 
     }
 
-    private ClienteTO parseTO(String fluxoAux, int ID) {
+    private ClienteTO parseTO(String fluxoAux, int par) {
         ClienteTO idCli = new ClienteTO();
         if (!fluxoAux.equals("INCLUIR")) {
-            idCli.setIdCliente(ID);
+            String id = null;
+            idCli.setIdCliente(id);
         }
         idCli.setNome(jtxtNome.getText());
         idCli.setEndereco(jtxtEndereco.getText());
@@ -215,7 +227,7 @@ public class ClienteMain extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Codigo", "Nome", "Endereço", "Cidade", "UF"
+                "idCliente", "Nome", "Endereço", "Cidade", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -390,7 +402,7 @@ public class ClienteMain extends javax.swing.JInternalFrame {
         jInternalFrame1.setVisible(true);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel10.setText("Codigo..........:");
+        jLabel10.setText("idCliente........:");
 
         jtxtCodigo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jtxtCodigo.setEnabled(false);
@@ -476,30 +488,27 @@ public class ClienteMain extends javax.swing.JInternalFrame {
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtxtCidade)
-                        .addContainerGap())
+                        .addComponent(jtxtCidade))
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtxtNome)
                             .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtxtNome)
-                                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                                        .addComponent(jtxtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(jInternalFrame1Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtxtEndereco)))
-                        .addContainerGap())
+                                .addComponent(jtxtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtxtEndereco))
                     .addGroup(jInternalFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtxtUF, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jbtnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -531,10 +540,10 @@ public class ClienteMain extends javax.swing.JInternalFrame {
                     .addComponent(jtxtUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(18, 18, 18)
-                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbtnOk)
                     .addComponent(btnSair1))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -583,7 +592,48 @@ public class ClienteMain extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
-        
+ // Pede confirmação para emissao do relatório
+        Object[] options = {"Sim", "Não"};
+        int q = JOptionPane.showOptionDialog(null,
+                "Tem certeza que deseja emitir relatório?", "Saída",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                options, options[1]);
+        if (q == JOptionPane.YES_OPTION) {
+            fluxo = "RELATORIO";
+            // Relatório de usuarios cadastrados e mostrados na tela
+            // array com o que está na tela
+            ArrayList<ClienteTO> relCliGerado;
+
+            try {
+                relCliGerado = (ArrayList<ClienteTO>) DAO.ClienteDAO.buscaCliente(jTextPesquisar.getText());
+                if (relCliGerado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Cliente(s) " + jTextPesquisar.getText() + " não encontrado(s)!");
+                    return;
+                }
+                // Pergunta se imprime ou gera PDF
+                Object[] options1 = {"Impressora", "Tela"};
+                int q1 = JOptionPane.showOptionDialog(null,
+                        "O relatório será?", "Saída",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                        options1, options1[1]);
+                if (q1 == JOptionPane.YES_OPTION) {
+
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelClientes.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relCliGerado));
+                    JasperPrintManager.printPage(print, 0, false);
+                } else {
+                    JasperReport report = JasperCompileManager.compileReport(geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelClientes.jrxml");
+                    JasperPrint print = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(relCliGerado));
+                    // exportacao do relatorio para outro formato, no caso PDF 
+                    JasperExportManager.exportReportToPdfFile(print, geral.Geral.getDiretorioAtual() + "\\Relatorios\\RelClientes.pdf");
+                    JasperViewer.viewReport(print, false);
+                }
+            } catch (JRException | ValidacaoException | DaoException  ex) {
+                Logger.getLogger(VendedoresMain.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage() + " \nErro na geração relatório!");
+            } 
+        }
+                
     }//GEN-LAST:event_btnRelatorioActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
