@@ -29,7 +29,7 @@ public class DataBaseDaoFactory {
 
             com.mysql.jdbc.Connection conn = null;
 
-            String urlPg = "jdbc:mysql://localhost:3306/aula1";
+            String urlPg = "jdbc:mysql://localhost:3306/appcontrolealuno";
             try {
                     conn = (com.mysql.jdbc.Connection) DriverManager.getConnection(urlPg, "root", "");     
             } catch (SQLException ex) {
